@@ -1,0 +1,24 @@
+{
+  "name": "simulacrodb_saludplus",
+  "version": "1.0.0",
+  "description": "How to run:",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "module",
+    "url": "git+https://github.com/Nataliavos/SimulacroDB_SaludPlus.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Nataliavos/SimulacroDB_SaludPlus/issues"
+  },
+  "homepage": "https://github.com/Nataliavos/SimulacroDB_SaludPlus#readme",
+  "dependencies": {
+    "dotenv": "^17.3.1",
+    "pg": "^8.18.0"
+  }
+}
