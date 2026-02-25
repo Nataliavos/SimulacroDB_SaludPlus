@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS speciality (
 
 CREATE TABLE IF NOT EXISTS treatment (
 	treatment_code varchar(255) NOT NULL UNIQUE,
-	treatment_description varchar(255),
+	treatment_description varchar(255) NOT NULL,
 	treatment_cost int NOT NULL,
 	PRIMARY KEY(treatment_code)
 );
