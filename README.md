@@ -5,6 +5,11 @@ How to run:
 -Install mongodb server
 -Install mongosh
 
+nmp init -y (package js)
+npm i express, pg, dotenv
+node --watch src/server.js (npm run dev)
+npm i csv-parser
+
 bash:
 
 mongosh

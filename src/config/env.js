@@ -5,7 +5,7 @@ import { log } from "console";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-config({path: resolve(__dirname, '../.env')});
+config({path: resolve(__dirname, '../../.env')}); // para cargar las variables de entorno desde el archivo .env, resolve resuelve la ruta del archivo .env
 
 // Variables obligatorias
 const required = ["MONGO_URI", "POSTGRES_URI"];

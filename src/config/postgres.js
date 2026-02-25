@@ -15,8 +15,10 @@ const pool = new Pool({
     connectionString: env.postgresUri
 });
 
+export { pool };
+
 // crear tablas de la db
-async function executeSQL(){
+export async function executeSQL(){
     let client;
 
     try {
@@ -45,5 +47,3 @@ async function executeSQL(){
         if (client) client.release(); // release libera la conexión que se había creado
     }
 }
-
-executeSQL();
