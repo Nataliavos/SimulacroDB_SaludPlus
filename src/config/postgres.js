@@ -24,7 +24,7 @@ export async function executeSQL(){
         await client.query("BEGIN"); // Iniciar transacción
 
         // Leer archivo SQL local
-        const sqlPath = path.join(__dirname, '../data/script_saludplus.sql');
+        const sqlPath = path.join(__dirname, '../../data/script_saludplus.sql');
         const sql = fs.readFileSync(sqlPath, 'utf-8');
 
 

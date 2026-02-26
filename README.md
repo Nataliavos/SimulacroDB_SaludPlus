@@ -4,11 +4,13 @@ How to run:
 
 -Install mongodb server
 -Install mongosh
+-Install mongoose
 
 nmp init -y (package js)
 npm i express, pg, dotenv
 node --watch src/server.js (npm run dev)
 npm i csv-parser
+npm i mongoose
 
 bash:
 
@@ -25,6 +27,12 @@ db.createCollection("namecollection")  --> crear nueva colección/tabla
 bash:
 
 sudo -u postgres psql (cambiar al usuario de postgres e ingresar al cliente psql)
+
+
+Comprobar si Mongodb está encendio:
+  sudo systemctl status mongod
+Sino, iniciarlo:
+  sudo systemctl start mongod
 
 GUÍA SIMULACRO 
 
