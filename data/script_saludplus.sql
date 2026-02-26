@@ -1,7 +1,7 @@
 
-CREATE TABLE IF NOT EXISTS appointment (
+CREATE TABLE IF NOT EXISTS appointments (
 	appointment_id varchar(255) NOT NULL UNIQUE,
-	appointment_date date NOT NULL UNIQUE,
+	appointment_date date NOT NULL,
 	patient_id int,
 	doctor_id int,
 	treatment_code varchar(255) NOT NULL,
@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS appointment (
 );
 
 
-CREATE TABLE IF NOT EXISTS doctor (
+CREATE TABLE IF NOT EXISTS doctors (
 	doctor_id serial NOT NULL UNIQUE,
 	doctor_name varchar(255) NOT NULL,
 	doctor_email varchar(255) NOT NULL UNIQUE,
@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS doctor (
 );
 
 
-CREATE TABLE IF NOT EXISTS patient (
+CREATE TABLE IF NOT EXISTS patients (
 	patient_id serial NOT NULL UNIQUE,
 	patient_name varchar(255) NOT NULL,
 	patient_email varchar(255) NOT NULL UNIQUE,
@@ -30,14 +30,14 @@ CREATE TABLE IF NOT EXISTS patient (
 );
 
 
-CREATE TABLE IF NOT EXISTS speciality (
+CREATE TABLE IF NOT EXISTS specialities (
 	speciality_id serial NOT NULL UNIQUE,
-	speciality varchar(255) NOT NULL,
+	speciality varchar(255) NOT NULL UNIQUE,
 	PRIMARY KEY(speciality_id)
 );
 
 
-CREATE TABLE IF NOT EXISTS treatment (
+CREATE TABLE IF NOT EXISTS treatments (
 	treatment_code varchar(255) NOT NULL UNIQUE,
 	treatment_description varchar(255) NOT NULL,
 	treatment_cost int NOT NULL,
@@ -45,26 +45,26 @@ CREATE TABLE IF NOT EXISTS treatment (
 );
 
 
-CREATE TABLE IF NOT EXISTS insurance_provider (
+CREATE TABLE IF NOT EXISTS insurance_providers (
 	insurance_id serial NOT NULL UNIQUE,
-	insurance_provider varchar(255) NOT NULL,
+	insurance_provider varchar(255) NOT NULL UNIQUE,
 	coverage_percentage int NOT NULL,
 	PRIMARY KEY(insurance_id)
 );
 
 
-ALTER TABLE appointment
-ADD FOREIGN KEY(patient_id) REFERENCES patient(patient_id)
+ALTER TABLE appointments
+ADD FOREIGN KEY(patient_id) REFERENCES patients(patient_id)
 ON UPDATE NO ACTION ON DELETE NO ACTION;
-ALTER TABLE appointment
-ADD FOREIGN KEY(doctor_id) REFERENCES doctor(doctor_id)
+ALTER TABLE appointments
+ADD FOREIGN KEY(doctor_id) REFERENCES doctors(doctor_id)
 ON UPDATE NO ACTION ON DELETE NO ACTION;
-ALTER TABLE appointment
-ADD FOREIGN KEY(treatment_code) REFERENCES treatment(treatment_code)
+ALTER TABLE appointments
+ADD FOREIGN KEY(treatment_code) REFERENCES treatments(treatment_code)
 ON UPDATE NO ACTION ON DELETE NO ACTION;
-ALTER TABLE doctor
-ADD FOREIGN KEY(speciality_id) REFERENCES speciality(speciality_id)
+ALTER TABLE doctors
+ADD FOREIGN KEY(speciality_id) REFERENCES specialities(speciality_id)
 ON UPDATE NO ACTION ON DELETE NO ACTION;
-ALTER TABLE patient
-ADD FOREIGN KEY(insurance_id) REFERENCES insurance_provider(insurance_id)
+ALTER TABLE patients
+ADD FOREIGN KEY(insurance_id) REFERENCES insurance_providers(insurance_id)
 ON UPDATE NO ACTION ON DELETE NO ACTION;

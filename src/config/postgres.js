@@ -11,11 +11,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // crear pull de conexión (pool trae el paquete de conexiones por defecto)
-const pool = new Pool({
+export const pool = new Pool({
     connectionString: env.postgresUri
 });
-
-export { pool };
 
 // crear tablas de la db
 export async function executeSQL(){
