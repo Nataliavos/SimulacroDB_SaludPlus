@@ -3,12 +3,38 @@ import { pool } from "../config/postgres.js";
 import { parse } from "csv-parse/sync"; // para parsear el csv a un formato entendible
 import { resolve } from "path";
 import { env } from "../config/env.js";
+import { ensureSchema } from "./schema_service.js";
 
 export async function migrate(clearBefore = false) {
     try {
-        let csvString = await readFile(resolve(env.fileDataCsv), "utf-8"); // fileDataCsv es la ruta del csv, está en env.js
+        // Primero garantizamos que exista la estructura de la DB
+        // Esto crea tablas, constraints e índices si no existen.
+        await ensureSchema();
 
-        // parseamos el csv a un formato entendible, rows es un array de arrays, cada array interno es una fila del csv
+
+        
+        // ✅ Diagnóstico: confirma en qué DB estás y si existe public.appointments
+        const diag = await pool.query(`
+        SELECT
+            current_database() AS db,
+            current_schema() AS schema,
+            current_user AS usr
+        `);
+        console.log("DIAG connection:", diag.rows[0]);
+
+        const exists = await pool.query(`
+        SELECT to_regclass('public.appointments') AS appointments_table
+        `);
+        console.log("DIAG appointments exists?:", exists.rows[0]);
+
+
+
+        // Luego leemos el CSV
+        // fileDataCsv es la ruta del csv, está en env.js
+        let csvString = await readFile(resolve(env.fileDataCsv), "utf-8");
+
+        // parseamos el csv a un formato entendible
+        // rows es un array de arrays, cada array interno es una fila del csv
         const rows = parse(csvString, {
             columns: true,
             trim: true,
@@ -26,10 +52,17 @@ export async function migrate(clearBefore = false) {
             Si haces BEGIN; TRUNCATE; COMMIT; no ganas mucho en este caso.
             Y si no manejas ROLLBACK cuando falla, dejas la transacción abierta y el cliente puede quedar en un estado feo (conexión “en transacción”, locks, etc.).
             */
-            // await pool.query('BEGIN');
-            await pool.query('TRUNCATE TABLE appointments, doctors, patients, specialties, treatments, insurance_providers CASCADE');
-            // await pool.query('COMMIT');
-            console.log('Previous data cleared succesfully');
+            // Usamos public. para evitar problemas de schema/search_path
+            await pool.query(`
+                TRUNCATE TABLE 
+                  public.appointments,
+                  public.doctors,
+                  public.patients,
+                  public.specialties,
+                  public.treatments,
+                  public.insurance_providers
+                CASCADE`);
+
         }
 
         // Insert uniques entities in PostgreSQL
@@ -50,14 +83,14 @@ export async function migrate(clearBefore = false) {
             const insuranceName = row.insurance_provider?.toLowerCase().trim();
             const specialtyName = row.specialty?.toLowerCase().trim();
             const treatmentCode = row.treatment_code?.trim();
-            
+
             const appointmentId = row.appointment_id?.trim();
             const appointmentDate = row.appointment_date?.trim();
 
             const treatmentCost = row.treatment_cost?.trim() ? parseFloat(row.treatment_cost) : null;
-            
+
             const amountPaid = row.amount_paid?.trim() ? parseFloat(row.amount_paid) : null;
-            
+
 
             // Validación temprana: si faltan campos esenciales, omitimos la fila
             // para evitar violaciones de NOT NULL o claves foráneas.

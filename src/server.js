@@ -10,8 +10,10 @@ try{
 
     // Corremos con migrate(true) una vez para vaciar registros antiguos de las tablas
     //await migrate(true);
-    await migrate();
-
+    
+    await migrate(); // default false
+    console.log("✅ Migration finished.");
+    process.exit(0);
     /* app.listen(env.port, () => {
         console.log(`Server running on port ${env.port}`);
     }); */

@@ -20,6 +20,9 @@ export async function executeSQL(){
     let client;
 
     try {
+        // Asegura que esta sesión use el schema public por defecto
+        await pool.query("SET search_path TO public;")
+
         client = await pool.connect();
         await client.query("BEGIN"); // Iniciar transacción
 

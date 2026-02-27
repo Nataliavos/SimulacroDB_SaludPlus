@@ -1,25 +1,4 @@
 
-CREATE TABLE IF NOT EXISTS appointments (
-	appointment_id varchar(255) NOT NULL UNIQUE,
-	date date NOT NULL,
-	patient_id int NOT NULL,
-	doctor_id int NOT NULL,
-	treatment_code varchar(255) NOT NULL,
-	insurance_id int NOT NULL,
-	amount_paid numeric(12, 2),
-	PRIMARY KEY(appointment_id)
-);
-
-
-CREATE TABLE IF NOT EXISTS doctors (
-	doctor_id serial NOT NULL UNIQUE,
-	doctor_name varchar(255) NOT NULL,
-	doctor_email varchar(255) NOT NULL UNIQUE,
-	specialty_id int,
-	PRIMARY KEY(doctor_id)
-);
-
-
 CREATE TABLE IF NOT EXISTS patients (
 	patient_id serial NOT NULL UNIQUE,
 	name varchar(255) NOT NULL,
@@ -36,14 +15,12 @@ CREATE TABLE IF NOT EXISTS specialties (
 	PRIMARY KEY(specialty_id)
 );
 
-
 CREATE TABLE IF NOT EXISTS treatments (
 	treatment_code varchar(255) NOT NULL UNIQUE,
 	description varchar(255) NOT NULL,
 	cost numeric(12, 2) NOT NULL,
 	PRIMARY KEY(treatment_code)
 );
-
 
 CREATE TABLE IF NOT EXISTS insurance_providers (
 	insurance_id serial NOT NULL UNIQUE,
@@ -52,19 +29,34 @@ CREATE TABLE IF NOT EXISTS insurance_providers (
 	PRIMARY KEY(insurance_id)
 );
 
+CREATE TABLE IF NOT EXISTS doctors (
+	doctor_id serial PRIMARY KEY,
+	doctor_name varchar(255) NOT NULL,
+	doctor_email varchar(255) NOT NULL UNIQUE,
+	specialty_id int,
+	CONSTRAINT fk_doctors_specialties
+	FOREIGN KEY (specialty_id)
+    REFERENCES specialties(specialty_id)
+);
 
-ALTER TABLE appointments
-ADD FOREIGN KEY(patient_id) REFERENCES patients(patient_id)
-ON UPDATE NO ACTION ON DELETE NO ACTION;
-ALTER TABLE appointments
-ADD FOREIGN KEY(insurance_id) REFERENCES insurance_providers(insurance_id)
-ON UPDATE NO ACTION ON DELETE NO ACTION;
-ALTER TABLE appointments
-ADD FOREIGN KEY(doctor_id) REFERENCES doctors(doctor_id)
-ON UPDATE NO ACTION ON DELETE NO ACTION;
-ALTER TABLE appointments
-ADD FOREIGN KEY(treatment_code) REFERENCES treatments(treatment_code)
-ON UPDATE NO ACTION ON DELETE NO ACTION;
-ALTER TABLE doctors
-ADD FOREIGN KEY(specialty_id) REFERENCES specialties(specialty_id)
-ON UPDATE NO ACTION ON DELETE NO ACTION;
+CREATE TABLE IF NOT EXISTS appointments (
+	appointment_id varchar(255) PRIMARY KEY,
+	date date NOT NULL,
+	patient_id int NOT NULL,
+	doctor_id int NOT NULL,
+	treatment_code varchar(255) NOT NULL,
+	insurance_id int NOT NULL,
+	amount_paid numeric(12, 2),
+	
+	CONSTRAINT fk_appointments_patients
+	FOREIGN KEY(patient_id) REFERENCES patients(patient_id),
+
+	CONSTRAINT fk_appointments_doctors
+ 	FOREIGN KEY(doctor_id) REFERENCES doctors(doctor_id),
+
+	CONSTRAINT fk_appointments_insurance_providers
+ 	FOREIGN KEY(insurance_id) REFERENCES insurance_providers(insurance_id),
+
+	CONSTRAINT fk_appointments_treatments 
+ 	FOREIGN KEY(treatment_code) REFERENCES treatments(treatment_code)
+);
