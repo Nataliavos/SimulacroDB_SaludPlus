@@ -8,6 +8,8 @@ try{
     await executeSQL();
     console.log("Connected to postgres successfully");
 
+    // Corremos con migrate(true) una vez para vaciar registros antiguos de las tablas
+    //await migrate(true);
     await migrate();
 
     /* app.listen(env.port, () => {

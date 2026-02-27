@@ -1,3 +1,63 @@
+
+How to run:
+
+-Install mongodb server
+-Install mongosh
+-Install mongoose
+
+nmp init -y (package js)
+npm i express, pg, dotenv
+node --watch src/server.js (npm run dev)
+npm i csv-parser
+npm i mongoose
+
+bash:
+
+mongosh
+show dbs
+use SaludPlus
+show collections / show tables --> ver tablas
+b.patienthistories.find() --> ver registros de una tabla
+db.createCollection("namecollection")  --> crear nueva colección/tabla
+
+-Install postgreSQL (o usar remoto Supabase)
+-Install psql
+
+bash:
+
+sudo -u postgres psql (cambiar al usuario de postgres e ingresar al cliente psql)
+
+
+Comprobar si Mongodb está encendio:
+  sudo systemctl status mongod
+Sino, iniciarlo:
+  sudo systemctl start mongod
+
+GUÍA SIMULACRO 
+
+ESTRUCTURA DB:
+insurance_provider: name, coverage_percentage
+patient: name, email, phone, adress
+doctor
+speciality
+treatment
+appointment
+
+Diagrama MER (draw.io)
+
+MONGODB:
+Crear colecciones (patient_histories)
+
+CREAR API (con express):
+usar librería pg (npm i pg)
+
+-Generar package json -> npm -y init
+-Crear archivo de variables de entorno -> .env
+-Install -> npm i dotenv
+-En el package.json cambiar -> "type": "module"
+-Install -> npm i pg
+
+
 # Flujo de trabajo diario — Proyecto SaludPlus
 
 Este documento resume, paso a paso, las acciones que debes realizar antes de ejecutar código en el proyecto. Sigue el orden y adapta comandos según tu entorno (local, Docker, VM).
